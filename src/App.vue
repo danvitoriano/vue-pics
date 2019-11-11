@@ -1,17 +1,17 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Tela msg="Fiap Vue Pics" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Tela from './components/Tela.vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    Tela
   }
 }
 </script>

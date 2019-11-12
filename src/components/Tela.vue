@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h1>{{msg}}</h1>
-    <h2>{{titulo}}</h2>
+    <h1>{{ msg }}</h1>
+    <h2>{{ titulo }}</h2>
     <button v-on:click="reverseMessage">Inverter</button>
-    <p>{{message}}</p>
+    <p>{{ message }}</p>
     <input v-model="message" />
     <h3 v-text="titulo + ' kkk'"></h3>
     <span v-if="seen">Mostra isso?</span>
@@ -12,8 +12,11 @@
     <img :src="foto.url" :alt="foto.alt" />
     <ul>
       <li v-for="post of posts" v-bind:key="post.id">
-          {{post.title}}
-        <!-- <img :src="foto.url" :title="foto.title" /> -->
+        <!-- {{ post.title }} -->
+        <img
+          :src="post.avatar"
+          :title="post.first_name + ' ' + post.last_name"
+        />
       </li>
     </ul>
   </div>
@@ -24,13 +27,14 @@ import axios from "axios";
 export default {
   name: "Tela",
   created() {
-      axios.get("http://jsonplaceholder.typicode.com/posts")
-        .then(response => {
-            this.fotos = response
-        })
-        .catch(e => {
-            this.erros.push(e)
-        })
+    axios
+      .get("https://reqres.in/api/users")
+      .then(response => {
+        this.posts = response.data.data;
+      })
+      .catch(e => {
+        this.erros.push(e);
+      });
   },
   methods: {
     reverseMessage() {
@@ -74,5 +78,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

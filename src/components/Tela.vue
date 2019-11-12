@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>{{ msg }}</h1>
+  <div class="corpo">
+    <h1 class="centralizado">{{ msg }}</h1>
     <h2>{{ titulo }}</h2>
     <button v-on:click="reverseMessage">Inverter</button>
     <p>{{ message }}</p>
@@ -10,13 +10,16 @@
     <h3 v-text="titulo + new Date().toLocaleString()"></h3>
     <img v-bind:src="foto.url" v-bind:alt="foto.alt" />
     <img :src="foto.url" :alt="foto.alt" />
-    <ul>
-      <li v-for="post of posts" v-bind:key="post.id">
-        <!-- {{ post.title }} -->
-        <img
-          :src="post.avatar"
-          :title="post.first_name + ' ' + post.last_name"
-        />
+    <ul class="lista-fotos">
+      <li v-for="post of posts" v-bind:key="post.id" class="lista-fotos-item">
+        <!-- inicio painel -->
+        <div class="painel">
+          <h2 class="painel-titulo">{{post.first_name + ' ' + post.last_name}}</h2>
+          <div class="painel-corpo">
+            <img class="imagem-responsiva" :src="post.avatar" :title="post.email" />
+          </div>
+        </div>
+        <!-- fim painel -->
       </li>
     </ul>
   </div>
@@ -78,4 +81,52 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.centralizado {
+  text-align: center;
+}
+
+.corpo {
+  font-family: Helvetica, Arial, sans-serif;
+  margin: 0 auto;
+  width: 96%;
+  color: gray;
+}
+
+.lista-fotos {
+  list-style: none;
+}
+
+.lista-fotos .lista-fotos-item {
+  display: inline-block;
+}
+
+/* estilo do painel */
+
+.imagem-responsiva {
+    width: 100%;
+  }
+
+.painel {
+  padding: 0 auto;
+  border: solid 1px grey;
+  display: inline-block;
+  margin: 0 10px;
+  box-shadow: 2px 2px 10px grey;
+  width: 150px;
+  height: 100%;
+  vertical-align: top;
+  text-align: center;
+}
+
+.painel .painel-titulo {
+  font-size: 14px;
+  text-align: center;
+  border-bottom: solid 1px grey;
+  background: mediumspringgreen;
+  margin: 0;
+  padding: 10px;
+  text-transform: uppercase;
+
+}
+</style>

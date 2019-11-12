@@ -11,16 +11,27 @@
     <img v-bind:src="foto.url" v-bind:alt="foto.alt" />
     <img :src="foto.url" :alt="foto.alt" />
     <ul>
-      <li v-for="foto of fotos" v-bind:key="foto.i">
-        <img :src="foto.url" :alt="foto.alt" />
+      <li v-for="post of posts" v-bind:key="post.id">
+          {{post.title}}
+        <!-- <img :src="foto.url" :title="foto.title" /> -->
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "Tela",
+  created() {
+      axios.get("http://jsonplaceholder.typicode.com/posts")
+        .then(response => {
+            this.fotos = response
+        })
+        .catch(e => {
+            this.erros.push(e)
+        })
+  },
   methods: {
     reverseMessage() {
       this.titulo = this.titulo
@@ -32,6 +43,8 @@ export default {
   data() {
     return {
       message: "Olá usuário",
+      erros: [],
+      posts: [],
       seen: false,
       titulo: "Ola",
       foto: {

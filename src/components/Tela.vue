@@ -2,18 +2,17 @@
   <div class="corpo">
     <h1 class="centralizado">{{ msg }}</h1>
     <h2>{{ titulo }}</h2>
-    <button v-on:click="reverseMessage">Inverter</button>
-    <p>{{ message }}</p>
-    <input v-model="message" />
-    <h3 v-text="titulo + ' kkk'"></h3>
-    <span v-if="seen">Mostra isso?</span>
-    <h3 v-text="titulo + new Date().toLocaleString()"></h3>
-    <img v-bind:src="foto.url" v-bind:alt="foto.alt" />
-    <img :src="foto.url" :alt="foto.alt" />
+    <input
+      type="search"
+      v-on:input="filtro = $event.target.value"
+      class="filtro"
+      placeholder="filtre pelo título da foto"
+    />
+    {{filtro}}
     <ul class="lista-fotos">
-      <li v-for="post of posts" v-bind:key="post.id" class="lista-fotos-item">
-        <meu-painel :titulo="post.first_name + ' ' + post.last_name">
-          <img class="imagem-responsiva" :src="post.avatar" :title="post.email" />
+      <li v-for="foto of fotosComFiltro" v-bind:key="foto.id" class="lista-fotos-item">
+        <meu-painel :titulo="foto.first_name">
+          <img class="imagem-responsiva" :src="foto.avatar" :title="foto.email" />
         </meu-painel>
       </li>
     </ul>
@@ -22,18 +21,30 @@
 
 <script>
 import axios from "axios";
-import Painel from './shared/painel/Painel'
+import Painel from "./shared/painel/Painel";
 
 export default {
   components: {
-    'meu-painel': Painel
+    "meu-painel": Painel
   },
   name: "Tela",
+  computed: {
+    fotosComFiltro() {
+      if (this.filtro) {
+        // filtra a lista, por enquanto vamos retornar uma lista em branco
+        let exp = new RegExp(this.filtro.trim(), "i");
+        return this.fotos.filter(foto => exp.test(foto.first_name));
+      } else {
+        // se o campo estiver vazio, não filtramos, retornamos a lista
+        return this.fotos;
+      }
+    }
+  },
   created() {
     axios
       .get("https://reqres.in/api/users")
       .then(response => {
-        this.posts = response.data.data;
+        this.fotos = response.data.data;
       })
       .catch(e => {
         this.erros.push(e);
@@ -49,30 +60,11 @@ export default {
   },
   data() {
     return {
+      filtro: "",
       message: "Olá usuário",
       erros: [],
-      posts: [],
-      seen: false,
-      titulo: "Ola",
-      foto: {
-        url:
-          "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTwV4kVzT5McBdGSgqlVeRzubrNH_mOrrkKseDOGFURq20HmsrelEfMU7It",
-        alt: "Cachorro"
-      },
-      fotos: [
-        {
-          url:
-            "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTwV4kVzT5McBdGSgqlVeRzubrNH_mOrrkKseDOGFURq20HmsrelEfMU7It",
-          alt: "Cachorro",
-          i: 1
-        },
-        {
-          url:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOhmlmzV4-Sifx5BIc2SXeA-1CtZJf8jb8V_vPZyKbXIQJKU-rkxGO6OM",
-          alt: "Gato",
-          i: 2
-        }
-      ]
+      fotos: [],
+      titulo: "Ola"
     };
   },
   props: {
@@ -101,5 +93,8 @@ export default {
   display: inline-block;
 }
 
-
+.filtro {
+  display: block;
+  width: 100%;
+}
 </style>

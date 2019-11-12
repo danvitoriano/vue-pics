@@ -2,11 +2,14 @@
   <div>
     <h1>{{msg}}</h1>
     <h2>{{titulo}}</h2>
+    <button v-on:click="reverseMessage">Inverter</button>
+    <p>{{message}}</p>
+    <input v-model="message" />
     <h3 v-text="titulo + ' kkk'"></h3>
     <span v-if="seen">Mostra isso?</span>
     <h3 v-text="titulo + new Date().toLocaleString()"></h3>
-    <img v-bind:src="foto.url" v-bind:alt="foto.alt">
-    <img :src="foto.url" :alt="foto.alt">
+    <img v-bind:src="foto.url" v-bind:alt="foto.alt" />
+    <img :src="foto.url" :alt="foto.alt" />
     <ul>
       <li v-for="foto of fotos" v-bind:key="foto.i">
         <img :src="foto.url" :alt="foto.alt" />
@@ -18,8 +21,17 @@
 <script>
 export default {
   name: "Tela",
+  methods: {
+    reverseMessage() {
+      this.titulo = this.titulo
+        .split("")
+        .reverse()
+        .join("");
+    }
+  },
   data() {
     return {
+      message: "Olá usuário",
       seen: false,
       titulo: "Ola",
       foto: {
